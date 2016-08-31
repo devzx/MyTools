@@ -17,7 +17,7 @@
         if ($LogErrors)
         {
             $LogName = "$((Get-Date).ToString('HHmmss')).txt"
-            $Folder = 'Get-OSInfo'
+            $Folder = 'Get-MTSystemInfo'
             $ErrorLog = Join-Path -Path $Env:TEMP -ChildPath $Folder | Join-Path -ChildPath $LogName
         }
 
