@@ -16,9 +16,7 @@
     {
         if ($LogErrors)
         {
-            $LogName = "$((Get-Date).ToString('HHmmss')).txt"
-            $Folder = 'Get-MTSystemInfo'
-            $ErrorLog = Join-Path -Path $Env:TEMP -ChildPath $Folder | Join-Path -ChildPath $LogName
+            $LogName = ErrorLog
         }
 
     }
@@ -41,14 +39,14 @@
                 Write-Warning "$_"
                 if ($LogErrors)
                 {
-                    if (-not (Test-Path (Split-Path $ErrorLog -Parent)))
+                    if (-not (Test-Path (Split-Path -Parent $LogName)))
                     {
                         Write-Verbose "Parent folder not found. Creating..."
-                        New-Item -ItemType Directory -Path (Split-Path $ErrorLog -Parent) | Out-Null
+                        New-Item -ItemType Directory -Path (Split-Path -Parent $LogName) | Out-Null
                     }
-                Write-Warning "Error log written to $ErrorLog"
+                Write-Warning "Error log written to $LogName"
                 $LogTimeStamp = 'dd/MM/yyyy HH\:mm\:ss'
-                "$((Get-Date).ToString($LogTimeStamp)) Failed to contact $($Computer.Toupper())" | Out-File -FilePath $ErrorLog -Append
+                "$((Get-Date).ToString($LogTimeStamp)) Failed to contact $($Computer.Toupper())" | Out-File -FilePath $LogName -Append
                 }
             }
             if ($Worked)
@@ -193,13 +191,20 @@ Function Get-MTVolumeInfo
                    Mandatory=$true,
                    ValueFromPipeline=$true,
                    ValueFromPipelineByPropertyName=$true)]
-        [string[]]$ComputerName
+        [string[]]$ComputerName,
+
+        [switch]$LogErrors
 
         
     
     )
     BEGIN
-    {}
+    {
+        if ($LogErrors)
+        {
+            $LogName = ErrorLog
+        }
+    }
     PROCESS
     {
         foreach ($Computer in $ComputerName)
@@ -266,3 +271,11 @@ Function Get-MTServiceProcessInfo
     }
     END{}
 }
+
+Function ErrorLog
+{
+    $Path = Join-Path -Path $env:TEMP -ChildPath "MTLog" | Join-Path -ChildPath "$((Get-Date).ToString('HHmmss')).txt"
+    return $Path
+}
+
+Export-ModuleMember -Function Get-MTServiceProcessInfo, Get-MTSystemInfo, Get-MTVolumeInfo, Set-MTLyncOnline
