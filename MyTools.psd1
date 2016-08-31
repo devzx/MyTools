@@ -27,7 +27,7 @@ Author = 'Devzx'
 CompanyName = 'Unknown'
 
 # Copyright statement for this module
-Copyright = '(c) 2016 Eli Judah. All rights reserved.'
+Copyright = '(c) 2016 Devzx. All rights reserved.'
 
 # Description of the functionality provided by this module
 # Description = ''
