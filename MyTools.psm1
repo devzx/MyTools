@@ -16,7 +16,7 @@
     {
         if ($LogErrors)
         {
-            $LogName = ErrorLog
+            $ErrorLog = ErrorLog
         }
 
     }
@@ -39,14 +39,11 @@
                 Write-Warning "$_"
                 if ($LogErrors)
                 {
-                    if (-not (Test-Path (Split-Path -Parent $LogName)))
-                    {
-                        Write-Verbose "Parent folder not found. Creating..."
-                        New-Item -ItemType Directory -Path (Split-Path -Parent $LogName) | Out-Null
-                    }
-                Write-Warning "Error log written to $LogName"
-                $LogTimeStamp = 'dd/MM/yyyy HH\:mm\:ss'
-                "$((Get-Date).ToString($LogTimeStamp)) Failed to contact $($Computer.Toupper())" | Out-File -FilePath $LogName -Append
+                    TestErrorLogParentExist($ErrorLog)
+
+                    Write-Warning "Error log written to $ErrorLog"
+                    $LogTimeStamp = 'dd/MM/yyyy HH\:mm\:ss'
+                    "$((Get-Date).ToString($LogTimeStamp)) Failed to contact $($Computer.Toupper())" | Out-File -FilePath $ErrorLog -Append
                 }
             }
             if ($Worked)
@@ -195,14 +192,13 @@ Function Get-MTVolumeInfo
 
         [switch]$LogErrors
 
-        
     
     )
     BEGIN
     {
         if ($LogErrors)
         {
-            $LogName = ErrorLog
+            $ErrorLog = ErrorLog
         }
     }
     PROCESS
@@ -272,10 +268,26 @@ Function Get-MTServiceProcessInfo
     END{}
 }
 
+##PRIVATE FUNCTIONS##
 Function ErrorLog
 {
+    #Returns a path name to be used for an error logging file
     $Path = Join-Path -Path $env:TEMP -ChildPath "MTLog" | Join-Path -ChildPath "$((Get-Date).ToString('HHmmss')).txt"
     return $Path
+}
+Function TestErrorLogParentExist ($ErrorLog)
+{
+    #Checks to see if the parent folder of the error log exists and if it doesn't, creates it
+    if (-not (Test-Path (Split-Path -Parent $ErrorLog)))
+    {
+        Write-Verbose 'Parent folder not found. Creating...'
+        New-Item -ItemType Directory -Path (Split-Path -Parent $ErrorLog) | Out-Null
+        Write-Verbose 'Parent folder created'
+    }
+    else
+    {
+        Write-Verbose "Found parent folder $(Split-Path -Parent $ErrorLog)"
+    }
 }
 
 Export-ModuleMember -Function Get-MTServiceProcessInfo, Get-MTSystemInfo, Get-MTVolumeInfo, Set-MTLyncOnline
