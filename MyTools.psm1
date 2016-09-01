@@ -278,7 +278,7 @@ Function Get-MTServiceProcessInfo
                 $Worked = $true
                 $Services = Get-WmiObject -Class Win32_Service `
                                            -Filter 'State = "Running"' `
-                                           -ComputerName $ComputerName `
+                                           -ComputerName $Computer `
                                            -ErrorAction Stop
             }
             catch
@@ -342,5 +342,4 @@ Function TestErrorLogParentExist ($ErrorLog)
         Write-Verbose "Found parent folder $(Split-Path -Parent $ErrorLog)"
     }
 }
-
 Export-ModuleMember -Function Get-MTServiceProcessInfo, Get-MTSystemInfo, Get-MTVolumeInfo, Set-MTLyncOnline
