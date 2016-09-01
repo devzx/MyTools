@@ -258,31 +258,63 @@ Function Get-MTServiceProcessInfo
                    Mandatory=$true,
                    ValueFromPipeline=$true,
                    ValueFromPipelineByPropertyName=$true)]
-        [string[]]$ComputerName
+        [string[]]$ComputerName,
+
+        [switch]$LogErros
     )
-    BEGIN{}
+    BEGIN
+    {
+        if ($LogErros)
+        {
+            $ErrorLog = ErrorLog
+        }
+    }
     PROCESS
     {
         foreach ($Computer in $ComputerName)
         {
-            $Services = Get-WmiObject -Class Win32_Service `
-                                       -Filter 'State = "Running"'
-            foreach ($Service in $Services)
+            try
             {
-                $Process = Get-WmiObject -Class Win32_Process `
-                                         -Filter "ProcessID = '$($Service.ProcessId)'"
-                $Props = @{
-                            'ComputerName'=$Service.__Server;
-                            'ThreadCount'=$Process.ThreadCount;
-                            'VMSize'=$Process.VM;
-                            'ProcessName'=$Process.ProcessName;
-                            'Name'=$Service.Name;
-                            'PeakPageFile'=$Process.PeakPageFileUsage;
-                            'DisplayName'=$Service.DisplayName
-                            }
-                $Obj = New-Object -TypeName PSObject -Property $Props
-                $Obj.PSObject.TypeNames.Insert(0,'MyTools.ServiceProcessInfo')
-                Write-Output $Obj
+                $Worked = $true
+                $Services = Get-WmiObject -Class Win32_Service `
+                                           -Filter 'State = "Running"' `
+                                           -ComputerName $ComputerName `
+                                           -ErrorAction Stop
+            }
+            catch
+            {
+                $Worked = $false
+                Write-Warning "Failed to contact $Computer"
+                Write-Warning "$_"
+                
+                if ($ErrorLog)
+                {
+                    TestErrorLogParentExist($ErrorLog)
+                    Write-Warning "Error log written to $ErrorLog"
+                    $LogTimeStamp = 'dd/MM/yyyy HH\:mm\:ss'
+                    "$((Get-Date).ToString($LogTimeStamp)) Failed to contact $($Computer.Toupper())" | Out-File -FilePath $ErrorLog -Append
+                } 
+            }
+
+            if ($Worked)
+            {
+                foreach ($Service in $Services)
+                {
+                    $Process = Get-WmiObject -Class Win32_Process `
+                                             -Filter "ProcessID = '$($Service.ProcessId)'"
+                    $Props = @{
+                                'ComputerName'=$Service.__Server;
+                                'ThreadCount'=$Process.ThreadCount;
+                                'VMSize'=$Process.VM;
+                                'ProcessName'=$Process.ProcessName;
+                                'Name'=$Service.Name;
+                                'PeakPageFile'=$Process.PeakPageFileUsage;
+                                'DisplayName'=$Service.DisplayName
+                                }
+                    $Obj = New-Object -TypeName PSObject -Property $Props
+                    $Obj.PSObject.TypeNames.Insert(0,'MyTools.ServiceProcessInfo')
+                    Write-Output $Obj
+                }
             }
         }
     }
