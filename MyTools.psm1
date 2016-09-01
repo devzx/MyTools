@@ -301,7 +301,8 @@ Function Get-MTServiceProcessInfo
                 foreach ($Service in $Services)
                 {
                     $Process = Get-WmiObject -Class Win32_Process `
-                                             -Filter "ProcessID = '$($Service.ProcessId)'"
+                                             -Filter "ProcessID = '$($Service.ProcessId)'" `
+                                             -ComputerName $Computer
                     $Props = @{
                                 'ComputerName'=$Service.__Server;
                                 'ThreadCount'=$Process.ThreadCount;
@@ -320,7 +321,6 @@ Function Get-MTServiceProcessInfo
     }
     END{}
 }
-
 ##PRIVATE FUNCTIONS##
 Function ErrorLog
 {

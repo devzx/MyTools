@@ -75,5 +75,54 @@
                 </TableRowEntries>
             </TableControl>
         </View>
+        <View>
+            <Name>MyTools.VolumeInfo</Name>
+            <ViewSelectedBy>
+                <TypeName>MyTools.VolumeInfo</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Width>20</Width>
+                    </TableColumnHeader>
+                    
+                    <TableColumnHeader>
+                        <Width>28</Width>
+                    </TableColumnHeader>
+
+                    <TableColumnHeader>
+                        <Label>FreeSpace(GB)</Label>
+                        <Width>15</Width>
+                    </TableColumnHeader>
+
+                    <TableColumnHeader>
+                        <Label>Size(GB)</Label>
+                    </TableColumnHeader>
+                
+                </TableHeaders>
+            
+            <TableRowEntries>
+                <TableRowEntry>
+                    <TableColumnItems>
+                        <TableColumnItem>
+                            <PropertyName>ComputerName</PropertyName>
+                        </TableColumnItem>
+
+                        <TableColumnItem>
+                            <PropertyName>Drive</PropertyName>
+                        </TableColumnItem>
+
+                        <TableColumnItem>
+                            <ScriptBlock>"{0:N2}" -f ($_.FreeSpace / 1GB)</ScriptBlock>
+                        </TableColumnItem>
+
+                        <TableColumnItem>
+                            <ScriptBlock>"{0:N2}" -f ($_.Size / 1GB)</ScriptBlock>
+                        </TableColumnItem>
+                    </TableColumnItems>
+                </TableRowEntry>
+            </TableRowEntries>
+            </TableControl>
+        </View>
     </ViewDefinitions>
 </Configuration>
