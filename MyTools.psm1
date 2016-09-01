@@ -9,7 +9,6 @@
         [ValidateNotNullOrEmpty()]
         [String[]]$ComputerName,
 
-
         [Switch]$LogErrors
     )
     BEGIN
@@ -53,17 +52,17 @@
                 $CS = Get-WmiObject -Class Win32_ComputerSystem `
                                     -ComputerName $Computer
                 $Domain = Switch ($CS.PartOfDomain)
-                                 {
-                                 $true {'Yes'}
-                                 $false{'No'}
-                                 }
-                 $AdminStatus = switch($CS.AdminPasswordStatus)
-                            {
-                                0 {'Disabled'}
-                                1 {'Enabled'}
-                                2 {'Not Implemented'}
-                                3 {'Unknown'}
-                            }
+                          {
+                            $true {'Yes'}
+                            $false{'No'}
+                          }
+                $AdminStatus = switch($CS.AdminPasswordStatus)
+                                   {
+                                        0 {'Disabled'}
+                                        1 {'Enabled'}
+                                        2 {'Not Implemented'}
+                                        3 {'Unknown'}
+                                   }
                 $Props = @{
                             'ComputerName'=$CS.__Server;
                             'Manufacturer'=$CS.Manufacturer;
@@ -205,20 +204,42 @@ Function Get-MTVolumeInfo
     {
         foreach ($Computer in $ComputerName)
         {
-            $Volumes = Get-WmiObject -Class Win32_Volume `
-                                     -Filter 'DriveType = 3' `
-                                     -ComputerName $Computer
-            foreach ($Volume in $Volumes)
+            try
             {
-                $Props = @{
-                           'ComputerName'=$Volume.__Server;
-                           'Drive'=$Volume.Name;
-                           'FreeSpace'=$Volume.FreeSpace;
-                           'Size'=$Volume.Capacity
-                          }
-                $Obj = New-Object -TypeName PSObject -Property $Props
-                $Obj.PSObject.TypeNames.Insert(0,'MyTools.VolumeInfo')
-                Write-Output $Obj
+                $Worked = $true
+                $Volumes = Get-WmiObject -Class Win32_Volume `
+                                         -Filter 'DriveType = 3' `
+                                         -ComputerName $Computer `
+                                         -ErrorAction Stop
+            }
+            catch
+            {
+                $Worked = $false
+                Write-Warning "Failed to contact $Computer"
+                Write-Warning "$_"
+                if ($LogErrors)
+                {
+                    TestErrorLogParentExist($ErrorLog)
+
+                    Write-Warning "Error log written to $ErrorLog"
+                    $LogTimeStamp = 'dd/MM/yyyy HH\:mm\:ss'
+                    "$((Get-Date).ToString($LogTimeStamp)) Failed to contact $($Computer.Toupper())" | Out-File -FilePath $ErrorLog -Append
+                }
+            }
+            if ($Worked)
+            {
+                foreach ($Volume in $Volumes)
+                {
+                    $Props = @{
+                               'ComputerName'=$Volume.__Server;
+                               'Drive'=$Volume.Name;
+                               'FreeSpace'=$Volume.FreeSpace;
+                               'Size'=$Volume.Capacity
+                              }
+                    $Obj = New-Object -TypeName PSObject -Property $Props
+                    $Obj.PSObject.TypeNames.Insert(0,'MyTools.VolumeInfo')
+                    Write-Output $Obj
+                }
             }
         }   
     }
