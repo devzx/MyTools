@@ -124,5 +124,95 @@
             </TableRowEntries>
             </TableControl>
         </View>
+        <View>
+            <Name>MyTools.ServiceProcessInfo</Name>
+            <ViewSelectedBy>
+                <TypeName>MyTools.ServiceProcessInfo</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Width>20</Width>
+                    </TableColumnHeader>
+                    
+                    <TableColumnHeader>
+                        <Label>Service</Label>
+                    </TableColumnHeader>
+
+                    <TableColumnHeader/>
+
+                    <TableColumnHeader/>
+
+                    <TableColumnHeader>
+                        <Label>VM</Label>
+                    </TableColumnHeader>
+                
+                </TableHeaders>
+            
+            <TableRowEntries>
+                <TableRowEntry>
+                    <TableColumnItems>
+                        <TableColumnItem>
+                            <PropertyName>ComputerName</PropertyName>
+                        </TableColumnItem>
+
+                        <TableColumnItem>
+                            <PropertyName>Name</PropertyName>
+                        </TableColumnItem>
+
+                        <TableColumnItem>
+                            <PropertyName>DisplayName</PropertyName>
+                        </TableColumnItem>
+
+                        <TableColumnItem>
+                            <PropertyName>ProcessName</PropertyName>
+                        </TableColumnItem>
+
+                        <TableColumnItem>
+                            <PropertyName>VMSize</PropertyName>
+                        </TableColumnItem>
+
+                    </TableColumnItems>
+                </TableRowEntry>
+            </TableRowEntries>
+            </TableControl>
+        </View>
+        <View>
+            <Name>MyTools.ServiceProcessInfo</Name>
+            <ViewSelectedBy>
+                <TypeName>MyTools.ServiceProcessInfo</TypeName>
+            </ViewSelectedBy>
+            <ListControl>
+                <ListEntries>
+                    <ListEntry>
+                        <ListItems>
+                            <ListItem>
+                                <PropertyName>ComputerName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Name</PropertyName>
+                                <Label>Service</Label>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>DisplayName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>ProcessName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>VMSize</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>ThreadCount</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>PeakPageFile</PropertyName>
+                            </ListItem>
+                        </ListItems>
+                    </ListEntry>
+                </ListEntries>
+            </ListControl>
+
+        </View>
     </ViewDefinitions>
 </Configuration>
