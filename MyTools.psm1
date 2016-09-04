@@ -54,7 +54,7 @@
                 $Domain = Switch ($CS.PartOfDomain)
                           {
                             $true {'Yes'}
-                            $false{'No'}
+                            $false {'No'}
                           }
                 $AdminStatus = switch($CS.AdminPasswordStatus)
                                    {
