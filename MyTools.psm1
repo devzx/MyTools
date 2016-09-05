@@ -407,4 +407,4 @@ Function TestErrorLogParentExist ($ErrorLog)
         Write-Verbose "Found parent folder $(Split-Path -Parent $ErrorLog)"
     }
 }
-Export-ModuleMember -Function Get-MTServiceProcessInfo, Get-MTSystemInfo, Get-MTVolumeInfo, Set-MTLyncOnline, Get-MTRemoteSMBShare
+Export-ModuleMember -Function Get-MTServiceProcessInfo, Get-MTSystemInfo, Get-MTVolumeInfo, Set-MTLyncOnline, Get-MTRemoteSMBShare, Get-MTRemoteSMBShare
