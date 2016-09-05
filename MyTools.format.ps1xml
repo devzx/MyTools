@@ -212,7 +212,54 @@
                     </ListEntry>
                 </ListEntries>
             </ListControl>
+        </View>
+        <View>
+            <Name>MyTools.RemoteSMBShare</Name>
+            <ViewSelectedBy>
+                <TypeName>MyTools.RemoteSMBShare</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Width>20</Width>
+                    </TableColumnHeader>
+                    
+                    <TableColumnHeader>
+                        <Width>10</Width>
+                    </TableColumnHeader>
 
+                    <TableColumnHeader>
+                        <Width>20</Width>
+                    </TableColumnHeader>
+
+                    <TableColumnHeader/>
+                
+                </TableHeaders>
+            
+            <TableRowEntries>
+                <TableRowEntry>
+
+                    <TableColumnItems>
+                        <TableColumnItem>
+                            <PropertyName>ComputerName</PropertyName>
+                        </TableColumnItem>
+
+                        <TableColumnItem>
+                            <PropertyName>Name</PropertyName>
+                        </TableColumnItem>
+
+                        <TableColumnItem>
+                            <PropertyName>Description</PropertyName>
+                        </TableColumnItem>
+
+                        <TableColumnItem>
+                            <PropertyName>Path</PropertyName>
+                        </TableColumnItem>
+
+                    </TableColumnItems>
+                </TableRowEntry>
+            </TableRowEntries>
+            </TableControl>
         </View>
     </ViewDefinitions>
 </Configuration>
