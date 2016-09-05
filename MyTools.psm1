@@ -1,5 +1,22 @@
 ﻿Function Get-MTSystemInfo
 {
+<#
+.SYNOPSIS
+Displays valuable system information from a specified computer.
+.DESCRIPTION
+The Get-MTSystemInfo cmdlet provides system information by querying and gathering said information from
+a multitude of WMI cmdlets and packaging the most valuable data in to an easy to read output.
+.PARAMETER ComputerName
+Enter the name or IP address of the machine you would like to query.
+.PARAMETER LogErrors
+When this switch is selected, it enables error logging within the cmdlet.
+.EXAMPLE
+Get-MTSystemInfo -ComputerName Server1, Client1
+The above command would query Server1 and then Client1 and retrieve the information.
+.EXAMPLE
+Get-MTSystemInfo -ComputerName Server1 -LogErrors
+The above command would query Server1 and if it was unable to contact the machine, would log the machine name to the log file.
+#>
     [CmdletBinding()]
     Param
     (
