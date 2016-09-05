@@ -53,9 +53,10 @@
                                     -ComputerName $Computer
                 $Domain = Switch ($CS.PartOfDomain)
                           {
-                            $true {'Yes'}
+                            $true  {'Yes'}
                             $false {'No'}
                           }
+
                 $AdminStatus = switch($CS.AdminPasswordStatus)
                                    {
                                         0 {'Disabled'}
@@ -68,7 +69,7 @@
                             'Manufacturer'=$CS.Manufacturer;
                             'ModelNumber'=$CS.Model;
                             'DomainMember'=$Domain;
-                            'Domain'=$CS.Workgroup
+                            'Domain'=$CS.Domain;
                             'SerialNumber'=$BIOS.SerialNumber;
                             'OSInstallDate'=($OS.ConvertToDateTime($OS.InstallDate));
                             'Version'=$OS.Version;
