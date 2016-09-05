@@ -245,9 +245,6 @@ Function Get-MTVolumeInfo
     }
     END
     {}
-
-
-
 }
 Function Get-MTServiceProcessInfo
 {
@@ -361,6 +358,7 @@ Function Get-MTRemoteSMBShare
                 $Err = $_
                 $Worked = $False
                 Write-Warning "Failed to contact $Computer"
+                Write-Warning $Err.Exception.Message
                 if ($ErrorLog)
                 {
                     TestErrorLogParentExist($ErrorLog)
