@@ -84,8 +84,7 @@
         }
     }
     END
-    {
-    }
+    {}
 }
 Function Set-MTLyncOnline
 {
@@ -322,6 +321,73 @@ Function Get-MTServiceProcessInfo
     }
     END{}
 }
+Function Get-MTRemoteSMBShare
+{
+    [Cmdletbinding()]
+    Param
+    (
+        [Parameter(Mandatory=$True,
+                   ValueFromPipeline=$True)]
+        [Alias('HostName')]
+        [ValidateCount(1,5)]
+        [string[]]$ComputerName,
+
+        [switch]$LogErrors
+    )
+
+    BEGIN
+    {
+        if ($LogErrors)
+        {
+            $ErrorLog = ErrorLog
+        }
+    }
+    PROCESS
+    {
+        foreach ($Computer in $ComputerName)
+        {
+            try
+            {
+                $Worked = $True
+                $Shares = Invoke-Command -ComputerName $Computer `
+                                         -ScriptBlock `
+                                          { 
+                                              Get-SmbShare
+                                          }`
+                                         -ErrorAction Stop
+            }
+            catch
+            {
+                $Err = $_
+                $Worked = $False
+                Write-Warning "Failed to contact $Computer"
+                if ($ErrorLog)
+                {
+                    TestErrorLogParentExist($ErrorLog)
+                    Write-Warning "Error log written to $ErrorLog"
+                    $LogTimeStamp = 'dd/MM/yyyy HH\:mm\:ss'
+                    "$((Get-Date).ToString($LogTimeStamp)) Failed to contact $($Computer.Toupper())" | Out-File -FilePath $ErrorLog -Append
+                }
+            }
+            if($Worked)
+            {
+                foreach ($Share in $Shares)
+                {
+                    $Props = @{
+                                  'ComputerName'=$Share.PSComputerName;
+                                  'Description'=$Share.Description;
+                                  'Name'=$Share.Name;
+                                  'Path'=$Share.Path
+                              }
+                    $Obj = New-Object -TypeName PSObject -Property $Props
+                    $Obj.PSObject.Typenames.Insert(0, 'MyTools.RemoteSMBShare')
+                    Write-Output $Obj
+                }
+            }
+        }
+    }
+    END{}
+}
 ##PRIVATE FUNCTIONS##
 Function ErrorLog
 {
@@ -343,4 +409,4 @@ Function TestErrorLogParentExist ($ErrorLog)
         Write-Verbose "Found parent folder $(Split-Path -Parent $ErrorLog)"
     }
 }
-Export-ModuleMember -Function Get-MTServiceProcessInfo, Get-MTSystemInfo, Get-MTVolumeInfo, Set-MTLyncOnline
+Export-ModuleMember -Function Get-MTServiceProcessInfo, Get-MTSystemInfo, Get-MTVolumeInfo, Set-MTLyncOnline, Get-MTRemoteSMBShare
