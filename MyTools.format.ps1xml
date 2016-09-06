@@ -32,9 +32,13 @@
                         <Width>10</Width>
                     </TableColumnHeader>
 
-                    <TableColumnHeader/>
-
-                    <TableColumnHeader/>
+                    <TableColumnHeader>
+                        <Width>15</Width>
+                    </TableColumnHeader>
+                    
+                    <TableColumnHeader>
+                        <Width>15</Width>
+                    </TableColumnHeader>
 
                 </TableHeaders>
 

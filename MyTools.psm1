@@ -51,8 +51,9 @@ The above command would query Server1 and if it was unable to contact the machin
             {
                 
                 $Worked = $false
+                $Err = $_
                 Write-Warning "Failed to contact $Computer"
-                Write-Warning "$_"
+                Write-Warning $Err.Exception.Message
                 if ($LogErrors)
                 {
                     TestErrorLogParentExist($ErrorLog)
@@ -190,7 +191,7 @@ Set-MTLyncOnline -Shift Late
         }
         catch
         {
-            Write-Warning "$_"
+            Write-Warning $_
             Write-Warning 'Invalid credentials entered. Unable to restart Lync'
         }
     }
@@ -232,8 +233,9 @@ Function Get-MTVolumeInfo
             catch
             {
                 $Worked = $false
+                $Err = $_
                 Write-Warning "Failed to contact $Computer"
-                Write-Warning "$_"
+                Write-Warning $Err.Exception.Message
                 if ($LogErrors)
                 {
                     TestErrorLogParentExist($ErrorLog)
@@ -298,8 +300,9 @@ Function Get-MTServiceProcessInfo
             catch
             {
                 $Worked = $false
+                $Err = $_
                 Write-Warning "Failed to contact $Computer"
-                Write-Warning "$_"
+                Write-Warning $Err.Exception.Message
                 
                 if ($ErrorLog)
                 {
