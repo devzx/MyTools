@@ -21,8 +21,8 @@ The above command would query Server1 and if it was unable to contact the machin
     Param
     (
         [Parameter(Position=0,
-                   Mandatory=$true,
-                   ValueFromPipeline=$true)]
+                   Mandatory=$True,
+                   ValueFromPipeline=$True)]
         [ValidateNotNullOrEmpty()]
         [String[]]$ComputerName,
 
@@ -101,8 +101,7 @@ The above command would query Server1 and if it was unable to contact the machin
             }
         }
     }
-    END
-    {}
+    END{}
 }
 Function Set-MTLyncOnline
 {
@@ -202,9 +201,9 @@ Function Get-MTVolumeInfo
     Param
     (
         [Parameter(Position=0,
-                   Mandatory=$true,
-                   ValueFromPipeline=$true,
-                   ValueFromPipelineByPropertyName=$true)]
+                   Mandatory=$True,
+                   ValueFromPipeline=$True,
+                   ValueFromPipelineByPropertyName=$True)]
         [string[]]$ComputerName,
 
         [switch]$LogErrors
@@ -224,7 +223,7 @@ Function Get-MTVolumeInfo
         {
             try
             {
-                $Worked = $true
+                $Worked  = $True
                 $Volumes = Get-WmiObject -Class Win32_Volume `
                                          -Filter 'DriveType = 3' `
                                          -ComputerName $Computer `
@@ -232,8 +231,8 @@ Function Get-MTVolumeInfo
             }
             catch
             {
-                $Worked = $false
-                $Err = $_
+                $Worked = $False
+                $Err    = $_
                 Write-Warning "Failed to contact $Computer"
                 Write-Warning $Err.Exception.Message
                 if ($LogErrors)
@@ -262,8 +261,7 @@ Function Get-MTVolumeInfo
             }
         }   
     }
-    END
-    {}
+    END{}
 }
 Function Get-MTServiceProcessInfo
 {
@@ -271,9 +269,9 @@ Function Get-MTServiceProcessInfo
     Param
     (
         [Parameter(Position=0,
-                   Mandatory=$true,
-                   ValueFromPipeline=$true,
-                   ValueFromPipelineByPropertyName=$true)]
+                   Mandatory=$True,
+                   ValueFromPipeline=$True,
+                   ValueFromPipelineByPropertyName=$True)]
         [string[]]$ComputerName,
 
         [switch]$LogErros
@@ -291,7 +289,7 @@ Function Get-MTServiceProcessInfo
         {
             try
             {
-                $Worked = $true
+                $Worked = $True
                 $Services = Get-WmiObject -Class Win32_Service `
                                            -Filter 'State = "Running"' `
                                            -ComputerName $Computer `
@@ -299,7 +297,7 @@ Function Get-MTServiceProcessInfo
             }
             catch
             {
-                $Worked = $false
+                $Worked = $False
                 $Err    = $_
                 Write-Warning "Failed to contact $Computer"
                 Write-Warning $Err.Exception.Message
