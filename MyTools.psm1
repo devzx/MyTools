@@ -50,7 +50,7 @@ The above command would query Server1 and if it was unable to contact the machin
             catch
             {
                 
-                $Worked = $false
+                $Worked = $False
                 $Err = $_
                 Write-Warning "Failed to contact $Computer"
                 Write-Warning $Err.Exception.Message
@@ -71,8 +71,8 @@ The above command would query Server1 and if it was unable to contact the machin
                                     -ComputerName $Computer
                 $Domain = Switch ($CS.PartOfDomain)
                           {
-                            $true  {'Yes'}
-                            $false {'No'}
+                            $True  {'Yes'}
+                            $False {'No'}
                           }
 
                 $AdminStatus = switch($CS.AdminPasswordStatus)
@@ -83,17 +83,17 @@ The above command would query Server1 and if it was unable to contact the machin
                                         3 {'Unknown'}
                                    }
                 $Props = @{
-                            'ComputerName'=$CS.__Server;
-                            'Manufacturer'=$CS.Manufacturer;
-                            'ModelNumber'=$CS.Model;
-                            'DomainMember'=$Domain;
-                            'Domain'=$CS.Domain;
-                            'SerialNumber'=$BIOS.SerialNumber;
-                            'OSInstallDate'=($OS.ConvertToDateTime($OS.InstallDate));
-                            'Version'=$OS.Version;
-                            'SPMajorVersion'=$OS.ServicePackMajorVersion;
-                            'SPMinorVersion'=$OS.ServicePackMinorVersion;
-                            'AdminPassword'=$AdminStatus
+                            'ComputerName'   = $CS.__Server;
+                            'Manufacturer'   = $CS.Manufacturer;
+                            'ModelNumber'    = $CS.Model;
+                            'DomainMember'   = $Domain;
+                            'Domain'         = $CS.Domain;
+                            'SerialNumber'   = $BIOS.SerialNumber;
+                            'OSInstallDate'  = ($OS.ConvertToDateTime($OS.InstallDate));
+                            'Version'        = $OS.Version;
+                            'SPMajorVersion' = $OS.ServicePackMajorVersion;
+                            'SPMinorVersion' = $OS.ServicePackMinorVersion;
+                            'AdminPassword'  = $AdminStatus
                           }
                 $Obj = New-Object -TypeName PSObject -Property $Props
                 $Obj.PSObject.TypeNames.Insert(0, 'MyTools.SystemInfo')
@@ -120,7 +120,7 @@ Set-MTLyncOnline -Shift Late
     [Cmdletbinding()]
     Param
     (
-        [Parameter(Mandatory=$true,
+        [Parameter(Mandatory=$True,
                    HelpMessage='Enter a shift')]
         [ValidateSet('Early','Mid','Late','Test')]
         [String]$Shift
@@ -128,7 +128,7 @@ Set-MTLyncOnline -Shift Late
 
     try
     {
-        $Worked = $true
+        $Worked = $True
         $Lync = Get-Process -Name Lync -ErrorAction Stop | Select-Object -ExpandProperty Path
         
 
@@ -136,7 +136,7 @@ Set-MTLyncOnline -Shift Late
     }
     catch
     {
-        $Worked = $false
+        $Worked = $False
         Write-Warning $_.Exception.Message
         Write-Warning 'Lync not running. Please start Lync and run the script again.'
 
@@ -145,10 +145,10 @@ Set-MTLyncOnline -Shift Late
     if ($Worked)
     {
         
-        $Username = Read-Host -Prompt 'Enter your user name'
-        $Domain = $env:USERDNSDOMAIN
-        $UserPC = Join-Path -Path $Domain -ChildPath $Username
-        $Password = Read-Host -Prompt 'Enter your password' -AsSecureString
+        $Username   = Read-Host -Prompt 'Enter your user name'
+        $Domain     = $env:USERDNSDOMAIN
+        $UserPC     = Join-Path -Path $Domain -ChildPath $Username
+        $Password   = Read-Host -Prompt 'Enter your password' -AsSecureString
         $Credential = New-Object -TypeName System.Management.Automation.PSCredential `
                                  -ArgumentList $UserPC,$Password
         
@@ -170,7 +170,7 @@ Set-MTLyncOnline -Shift Late
             $Remaining = "{0:hh\:mm\:ss}" -f ($ShiftEnd - $CurrentTime) #Formats the time in hours minutes and seconds
             $Time = @{
                         'Time remaining'=$Remaining
-                      }
+                     }
             
             $Obj = New-Object -TypeName PSObject -Property $Time
             $Obj.PSObject.TypeNames.Insert(0, 'MyTools.LyncOnline')
@@ -300,7 +300,7 @@ Function Get-MTServiceProcessInfo
             catch
             {
                 $Worked = $false
-                $Err = $_
+                $Err    = $_
                 Write-Warning "Failed to contact $Computer"
                 Write-Warning $Err.Exception.Message
                 
@@ -321,13 +321,13 @@ Function Get-MTServiceProcessInfo
                                              -Filter "ProcessID = '$($Service.ProcessId)'" `
                                              -ComputerName $Computer
                     $Props = @{
-                                'ComputerName'=$Service.__Server;
-                                'ThreadCount'=$Process.ThreadCount;
-                                'VMSize'=$Process.VM;
-                                'ProcessName'=$Process.ProcessName;
-                                'Name'=$Service.Name;
-                                'PeakPageFile'=$Process.PeakPageFileUsage;
-                                'DisplayName'=$Service.DisplayName
+                                'ComputerName' = $Service.__Server;
+                                'ThreadCount'  = $Process.ThreadCount;
+                                'VMSize'       = $Process.VM;
+                                'ProcessName'  = $Process.ProcessName;
+                                'Name'         = $Service.Name;
+                                'PeakPageFile' = $Process.PeakPageFileUsage;
+                                'DisplayName'  = $Service.DisplayName
                                 }
                     $Obj = New-Object -TypeName PSObject -Property $Props
                     $Obj.PSObject.TypeNames.Insert(0,'MyTools.ServiceProcessInfo')
@@ -375,7 +375,7 @@ Function Get-MTRemoteSMBShare
             }
             catch
             {
-                $Err = $_
+                $Err    = $_
                 $Worked = $False
                 Write-Warning "Failed to contact $Computer"
                 Write-Warning $Err.Exception.Message
@@ -392,10 +392,10 @@ Function Get-MTRemoteSMBShare
                 foreach ($Share in $Shares)
                 {
                     $Props = @{
-                                  'ComputerName'=$Share.PSComputerName;
-                                  'Description'=$Share.Description;
-                                  'Name'=$Share.Name;
-                                  'Path'=$Share.Path
+                                  'ComputerName' = $Share.PSComputerName;
+                                  'Description'  = $Share.Description;
+                                  'Name'         = $Share.Name;
+                                  'Path'         = $Share.Path
                               }
                     $Obj = New-Object -TypeName PSObject -Property $Props
                     $Obj.PSObject.Typenames.Insert(0, 'MyTools.RemoteSMBShare')
